@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet"> 
+    {% block css %} {% endblock %} 
+    {% block title %} {% if title %}
+    <title>{{ title }}</title>
+    {% else %}
+    <title>Job Board</title>
+    {% endif %} {% endblock %}
+
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <div class="row">
+                <div class="col-6 nav-left">
+                    <a href="{{ url_for('index') }}" class="logo">
+                        <img src="{{url_for('static', filename='img/logo.svg')}}" alt="logo">
+                    </a>
+                    <ul class="navbar">
+                        <li><a href="/">Home</a></li>
+                        <li><a href="{{url_for('projects')}}">Projects</a></li>
+                        <li><a href="{{url_for('tag_add')}}">Post a project</a></li>
+                        <li><a href="{{url_for('profiles')}}">Profiles</a></li>
+                        <li><a href="{{url_for('privacy')}}" class="dropdown-container">Privacy</a></li>
+                    </ul>
+                </div>
+                <div class="col-6 nav-right">
+                    <div class="div-search">
+                        <form action="#" class="search-area">
+                            <input type="text" placeholder="Search..." class="search-input">
+                            <button type="submit" class="nav-search-button">
+                            <i class="fas fa-search"></i>
+                        </button>
+                        </form>
+                    </div>
+                    {% if current_user.is_authenticated %}
+                    <div class="header-contact">
+                        <a href="{{ url_for('logout') }}">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </a>
+                        <a href="{{ url_for('settings') }}" class="bell-dropdown-container dropdown-container">
+                            <i class="fas fa-cog"></i>
+                        </a>
+                    </div>
+                    <div class="header-user">
+                        <a href="{{ url_for('profile') }}" class="user-img">
+                            <img src="{{ image_file }}" alt="user">
+                        </a>
+                        <a href="{{ url_for('profile') }}" class="user-name"><span>{{ current_user.username }}</span></a>
+                    </div>
+                    {% else %}
+                    <div class="header-contact-wthlogin">
+                        <ul class="right-navbar navbar">
+                            <li><a href="{{ url_for('sign_up') }}" class="register-container">Sign Up</a></li>
+                            <li><a href="{{ url_for('sign_in') }}" class="login-container">Sign In</a></li>
+                        </ul>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </header>
+
+    {% block content %} {% endblock %}
+
+    <div class="empty"></div>
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="footer-content">
+                        <a href="{{url_for('index')}}" class="footer-logo">
+                            <img src="{{url_for('static', filename='img/logo.svg')}}" alt="footer_logo">
+                        </a>
+                        <div class="footer-copyright">
+                            <span>© 2021</span>
+                            <a href="#">Redesigned by Ahmed Hajiyev</a>
+                        </div>
+                        <div class="footer-nav">
+                            <a href="{{ url_for('privacy') }}">Privacy Policy</a>
+                        </div>
+                        <button class="to-top" type="button">
+                                <i class="fas fa-long-arrow-alt-up"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </footer>
+    <script src="{{url_for('static', filename='js/script.js')}}"></script>
+    {% block javascript %}
+    {% endblock %}
+</body>
+
+</html>

@@ -1,0 +1,199 @@
+{% extends "layout.html" %} 
+{% block css %}
+<link rel="stylesheet" href="{{url_for('static',filename='css/style.css')}}">
+<link rel="stylesheet" href="{{url_for('static',filename='css/single-project.css')}}"> 
+{% endblock %} 
+{% block content %}
+<main>
+    <div class="arrow-content">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <ul class="page-to-page">
+                        <li class="page_home"><a href="#">Home</a></li>
+                        <span><i class="fas fa-long-arrow-alt-right"></i></span>
+                        <li class="page_home"><a href="#">Projects</a></li>
+                        <span><i class="fas fa-long-arrow-alt-right"></i></span>
+                        <li class="page_projects"><a href="#">{{ post.title }}</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-9">
+                    <div class="single-post post">
+                        <div class="post-header">
+                            <a href="#" class="post-user-img">
+                                <img src="{{url_for('static', filename='profile-pictures/' + post.author.image_file )}}" alt="user">
+                            </a>
+                            <div>
+                                <h5>
+                                    <a href="#">{{ post.author.username }}</a>
+                                </h5>
+                                <p>{{ post.date_posted.strftime('%Y-%m-%d') }}</p>
+                            </div>
+                            {% if post.author == current_user %}
+                                <div class="hasDropdown dots">
+                                    <a href="#" class="post-dropdown-container">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                        <ul class="post-dropdown">
+                                            <li><a href="{{url_for('update_post', post_id=post.id)}}">Update</a></li>
+                                            <li><a href="{{url_for('delete_post', post_id=post.id)}}">Delete</a></li>
+                                        </ul>
+                                    </a>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="post-icons">
+                            <div class="post-icons-left">
+                                <div class="post-company">
+                                    <i class="fas fa-briefcase"></i>
+                                    {% if post.author.speciality %}
+                                        <span>{{ post.author.speciality }}</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="post-title">
+                            <h2>
+                                {{ post.title }}
+                            </h2>
+                        </div>
+                        <div class="post-options">
+                            <p>${{ post.min_pay }} - ${{ post.max_pay }}</p>
+                        </div>
+                        <div class="post-description">
+                            <p>{{ post.content }}</p>
+                        </div>
+                        <div class="post-tags">
+                            <a href="#">HTML</a>
+                            <a href="#">CSS</a>
+                            <a href="#">PHP</a>
+                        </div>
+                        <div class="post-status">
+                            <div class="heart-comment">
+                                <div class="like-comment">
+                                    <a href="#">
+                                        <i class="fas fa-heart"></i>
+                                        <span>15</span>
+                                    </a>
+                                </div>
+                                <div class="post-comments">
+                                    <div class="like-comment">
+                                        <button class="accordion" data-filter="{{ post.id }}">
+                                            <i class="fas fa-comment"></i>
+                                            </button>
+                                        <span>{{ comment_count }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="post-views">
+                                <i class="fas fa-eye"></i>
+                                <span>214</span>
+                            </div>
+                        </div>
+                        <div class="comment {{ post.id }}" style="display: none;">
+                            <form action="#" class="comment-form", method="POST">
+                                {{ form.hidden_tag() }}
+                                {{ form.content }}
+                                <button type="submit", name="submit", value="x"><i class="fab fa-telegram-plane"></i></button>
+                            </form>
+                            {% for comment in comments %}
+                                    <div class="comment-area">
+                                        <div class="comment-content">
+                                            <div class="comment-photo-text">
+                                                <a href="#" class="comment-photo">
+                                                    <img src="{{ url_for('static', filename='profile-pictures/' + comment.comment_author.image_file ) }}" alt="profile_photo">
+                                                </a>
+                                                <div class="user-comment">
+                                                    <h5>{{ comment.comment_author.username }}</h5>
+                                                    <p>{{ comment.date_writed.strftime('%Y-%m-%d') }}</p>
+                                                </div>
+                                            </div>
+                                            <div class="comment-text">
+                                                <p>{{ comment.content }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <h3 class="freelancer-bid-title">Freelancers Bidding</h3>
+                    {% for bid in bids %}
+                    <div class="freelancer-bid">
+                        <div class="freelancer-bid-left">
+                            <a href="#" class="bid-profile-photo">
+                                <img src="{{ url_for('static', filename='profile-pictures/' + bid.bid_owner.image_file ) }}" alt="profile">
+                            </a>
+                            <div class="freelancer">
+                                <h5 class="freelancer-name">
+                                    <a href="#">{{ bid.bid_owner.username }}</a>
+                                </h5>
+                                {% if bid.bid_owner.location %}
+                                    <p>
+                                        <i class="fas fa-compass"></i>
+                                        <span>{{ bid.bid_owner.location }}</span>
+                                    </p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="freelancer-bid-cost">
+                            <p>${{ bid.min_rate }} - ${{ bid.max_rate }}</p>
+                            <span>in {{ bid.delivery_duration }} days</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="col-3">
+                    <form action="" method="POST">
+                        {{ form.hidden_tag() }}
+                        <div class="filter">
+                            <div class="sidebox-title">Bid now this job
+                                <button type="button">Clear all</button>
+                            </div>
+                            <div class="filter-group">
+                                <label class="filter-label">Set Your Minimal Rate ($):</label>
+                                <div class="min_max_container">
+                                    <p class="filter-label">Min:</p>{{ bidform.min_rate(class="min-form") }}
+                                    <p class="filter-label">Max:</p>{{ bidform.max_rate(class="min-form") }}
+                                </div>
+                            </div>
+                            <div class="filter-group">
+                                {{ bidform.delivery_duration.label(class="filter-label") }}
+                                {{ bidform.delivery_duration(class="bid-form") }}
+                            </div>
+                            <div class="filter-group">
+                                {{ bidform.submit(class='bid-button') }}
+                            </div>
+                        </div>
+                    </form>
+                    <div class="sidebox-social sidebox">
+                        <span>Share:</span>
+                        <ul>
+                            <li class="facebook">
+                                <a href="#">
+                                    <img src="{{url_for('static',filename='img/Facebook.png')}}" alt="">
+                                </a>
+                            </li>
+                            <li class="instagram">
+                                <a href="#">
+                                    <img src="{{url_for('static',filename='img/Instagram.png')}}" alt="">
+                                </a>
+                            </li>
+                            <li class="twitter">
+                                <a href="#">
+                                    <img src="{{url_for('static',filename='img/Twitter.png')}}" alt="">
+                                </a>
+                            </li>
+                            <li class="vkontakte">
+                                <a href="#">
+                                    <img src="{{url_for('static',filename='img/Vkontakte.png')}}" alt="">
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

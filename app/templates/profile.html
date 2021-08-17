@@ -1,0 +1,200 @@
+{% extends "layout.html" %} {% block css %}
+<link rel="stylesheet" href="{{url_for('static',filename='css/profile.css')}}"> {% endblock %} {% block javascript %}
+<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+{% endblock %} {% block content %}
+<main>
+    <div class="arrow-content">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <ul class="page-to-page">
+                        <li class="page_home"><a href="#">Home</a></li>
+                        <span><i class="fas fa-long-arrow-alt-right"></i></span>
+                        <li class="page_projects"><a href="#">Profile</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-3">
+                    <div class="user-info box">
+                        <div class="common-info">
+                            <figure>
+                                <img src="{{ image_file }}" alt="user">
+                            </figure>
+                            <span class="user-name-span">{{ current_user.username }}</span>
+                            <span class="speciality">{{ current_user.speciality }}</span>
+                        </div>
+                        <div class="profile-buttons profiles-bottom">
+                            <div class="profile-icons">
+                                {% if current_user.location %}
+                                    <div>
+                                        <i class="fas fa-compass"></i>
+                                        <span class="location-span">{{ current_user.location }}</span>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="about-user">
+                            <ul class="info-about-user">
+                                <li>
+                                    <span>Hourly Rate:</span>
+                                    <span>${{ current_user.hourly_rate }} / hr</span>
+                                </li>
+                                <li>
+                                    <span>Age:</span>
+                                    <span>{{ current_user.age }}</span>
+                                </li>
+                                <li>
+                                    <span>Experience:</span>
+                                    <span>{{ current_user.experience }} Years</span>
+                                </li>
+                                <li>
+                                    <span>Job Done:</span>
+                                    <span>{{ current_user.job_done }}</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="sidebox-social sidebox">
+                        <span>Share:</span>
+                        <ul>
+                            <li class="facebook">
+                                <a href="#">
+                                    <img src="{{url_for('static',filename='img/Facebook.png')}}" alt="">
+                                </a>
+                            </li>
+                            <li class="instagram">
+                                <a href="#">
+                                    <img src="{{url_for('static',filename='img/Instagram.png')}}" alt="">
+                                </a>
+                            </li>
+                            <li class="twitter">
+                                <a href="#">
+                                    <img src="{{url_for('static',filename='img/Twitter.png')}}" alt="">
+                                </a>
+                            </li>
+                            <li class="vkontakte">
+                                <a href="#">
+                                    <img src="{{url_for('static',filename='img/Vkontakte.png')}}" alt="">
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <ul class="profile-nav">
+                        <li><a href="{{ url_for('profile') }}" class="profile-filter" data-filter="feeds">Feed</a></li>
+                        <li><a href="{{ url_for('info') }}" class="profile-filter" data-filter="user-information">Profile</a></li>
+                        <li><a href="{{ url_for('settings') }}" class="profile-filter" data-filter="settingss">Settings</a></li>
+                    </ul>
+                    <div class="toggle feeds">
+                        {% for post in posts %}
+                        <div class="post">
+                            <div class="post-header">
+                                <a href="#" class="post-user-img">
+                                    <img src="{{url_for('static', filename='profile-pictures/' + post.author.image_file )}}" alt="user">
+                                </a>
+                                <div>
+                                    <h5>
+                                        <a href="#">{{ post.author.username }}</a>
+                                    </h5>
+                                    <p>{{ post.date_posted.strftime('%Y-%m-%d') }}</p>
+                                </div>
+                                {% if post.author == current_user %}
+                                <div class="hasDropdown dots">
+                                    <a href="#/" class="post-dropdown-container" data-filter1="{{ post.id }}">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                        <ul class="post-dropdown {{ post.id }}">
+                                            <li><a href="{{url_for('update_post', post_id=post.id)}}">Update</a></li>
+                                            <li><a href="{{url_for('delete_post', post_id=post.id)}}">Delete</a></li>
+                                        </ul>
+                                    </a>
+                                </div>
+                            {% endif %}
+                            </div>
+                            {% if current_user.speciality %}
+                                <div class="post-icons">
+                                    <div class="post-icons-left">
+                                        <div class="post-company">
+                                            <i class="fas fa-briefcase"></i>
+                                            <span>{{ current_user.speciality }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            <div class="post-title">
+                                <h2>
+                                    <a href="{{ url_for('post', post_id=post.id) }}">{{ post.title }}</a>
+                                </h2>
+                            </div>
+                            <div class="post-options">
+                                <p>${{ post.min_pay }} - ${{ post.max_pay }}</p>
+                            </div>
+                            <div class="post-description">
+                                <p>{{ post.content }}</p>
+                            </div>
+                            {% for tag in post.tag %}
+                                <div class="post-tags">
+                                    <a href="#">{{ tag }}</a>
+                                </div>
+                            {% endfor %}
+                            <div class="post-status">
+                                <div class="heart-comment">
+                                    <div class="like-comment">
+                                        <a href="#">
+                                            <i class="fas fa-heart"></i>
+                                            <span>15</span>
+                                        </a>
+                                    </div>
+                                    <div class="post-comments">
+                                        <div class="like-comment">
+                                            <a href="{{ url_for('post', post_id=post.id) }}" class="accordion" data-filter="{{ post.id }}">
+                                                    <i class="fas fa-comment"></i>
+                                            </a> 
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="post-views">
+                                    <i class="fas fa-eye"></i>
+                                    <span>214</span>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        {% if count==0 %}
+                            <p>There is no post</p>
+                        {% endif %}
+                        {% if count > 3 %}
+                        <button class="more-post" type="button">Load more</button>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="profile-sidebox sidebox hot-projects">
+                        <div class="sidebox-title">
+                            <h4>Hot projects</h4>
+                        </div>
+                        <div class="sidebox-content">
+                            <div class="sidebox-job">
+                                {% for post in sidebox_posts.items %}
+                                <div class="sidebox-job">
+                                    <div class="sidebox-job-title">
+                                        <a href="{{ url_for('post', post_id=post.id) }}">{{ post.title }}</a>
+                                        <span>${{ post.min_pay }} - ${{ post.max_pay }}</span>
+                                    </div>
+                                    <div class="sidebox-job-speciality">
+                                        <i class="fas fa-briefcase"></i>
+                                        <span>{{ post.author.username }}</span>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <a href="{{ url_for('projects') }}" class="view-profile">View more</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

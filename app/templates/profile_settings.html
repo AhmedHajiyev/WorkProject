@@ -1,0 +1,329 @@
+{% extends "layout.html" %} {% block css %}
+<link rel="stylesheet" href="{{url_for('static',filename='css/profile.css')}}"> {% endblock %} {% block javascript %}
+<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+{% endblock %} {% block content %}
+<main>
+    <div class="arrow-content">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <ul class="page-to-page">
+                        <li class="page_home"><a href="#">Home</a></li>
+                        <span><i class="fas fa-long-arrow-alt-right"></i></span>
+                        <li class="page_projects"><a href="#">Settings</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-3">
+                    <div class="user-info box">
+                        <div class="common-info">
+                            <figure>
+                                <img src="{{ image_file }}" alt="user">
+                            </figure>
+                            <span class="user-name-span">{{ current_user.username }}</span>
+                            <span class="speciality">{{ current_user.speciality }}</span>
+                        </div>
+                        <div class="profile-buttons profiles-bottom">
+                            <div class="profile-icons">
+                                {% if current_user.location %}
+                                    <div>
+                                        <i class="fas fa-compass"></i>
+                                        <span class="location-span">{{ current_user.location }}</span>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="about-user">
+                            <ul class="info-about-user">
+                                <li>
+                                    <span>Hourly Rate:</span>
+                                    <span>${{ current_user.hourly_rate }} / hr</span>
+                                </li>
+                                <li>
+                                    <span>Age:</span>
+                                    <span>{{ current_user.age }}</span>
+                                </li>
+                                <li>
+                                    <span>Experience:</span>
+                                    <span>{{ current_user.experience }} Years</span>
+                                </li>
+                                <li>
+                                    <span>Job Done:</span>
+                                    <span>{{ current_user.job_done }}</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="sidebox-social sidebox">
+                        <span>Share:</span>
+                        <ul>
+                            <li class="facebook">
+                                <a href="#">
+                                    <img src="{{url_for('static',filename='img/Facebook.png')}}" alt="">
+                                </a>
+                            </li>
+                            <li class="instagram">
+                                <a href="#">
+                                    <img src="{{url_for('static',filename='img/Instagram.png')}}" alt="">
+                                </a>
+                            </li>
+                            <li class="twitter">
+                                <a href="#">
+                                    <img src="{{url_for('static',filename='img/Twitter.png')}}" alt="">
+                                </a>
+                            </li>
+                            <li class="vkontakte">
+                                <a href="#">
+                                    <img src="{{url_for('static',filename='img/Vkontakte.png')}}" alt="">
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <ul class="profile-nav">
+                        <li><a href="{{ url_for('profile') }}" class="profile-filter" data-filter="feeds">Feed</a></li>
+                        <li><a href="{{ url_for('info') }}" class="profile-filter" data-filter="user-information">Profile</a></li>
+                        <li><a href="{{ url_for('settings') }}" class="profile-filter" data-filter="settingss">Settings</a></li>
+                    </ul>
+                    <div class="toggle settings" style="display: block;">
+                        <form action="#" method="POST" enctype="multipart/form-data">
+                            {{ form.hidden_tag() }}
+                            <div class="profile-box">
+                                <h3 class="profile-box-title">Profile Details</h3>
+                                <div class="form-group-container">
+                                    <div class="w-100 mr-30">
+                                        <div class="form-group">
+                                            {{ form.username.label(class="form-label") }}
+                                            {% if form.username.errors %} 
+                                                {{ form.username(class="form-input is-invalid") }}
+                                                <div class="invalid-feedback">
+                                                    {% for error in form.username.errors %}
+                                                    <span>{{ error }}</span> 
+                                                    {% endfor %}
+                                                </div>
+                                            {% else %} 
+                                                {{ form.username(class="form-input") }} 
+                                            {% endif %}
+                                        </div>
+                                        <div class="form-group">
+                                            {{ form.picture.label(class="form-label") }}
+                                            {{ form.picture }}
+                                            {% if form.picture.errors %}
+                                                {% for error in form.picture.errors %}
+                                                    <span>{{ error }}</span>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
+                                        <div class="form-group">
+                                            {{ form.submit(class='form-button') }}
+                                        </div>
+                                    </div>
+                                    <div class="w-100 mr-30">
+                                        <div class="form-group">
+                                            {{ form.email.label(class="form-label") }}
+                                            {% if form.email.errors %} 
+                                                {{ form.email(class="form-input is-invalid") }}
+                                                <div class="invalid-feedback">
+                                                    {% for error in form.email.errors %}
+                                                    <span>{{ error }}</span> 
+                                                    {% endfor %}
+                                                </div>
+                                            {% else %} 
+                                                {{ form.email(class="form-input") }} 
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <form action="#", method="POST">
+                            {{ form.hidden_tag() }}
+                            <div class="profile-box-last profile-box">
+                                <h3 class="profile-box-title">Update info</h3>
+                                <div class="form-group-container">
+                                    <div class="w-100 mr-30">
+                                        <div class="form-group">
+                                            {{ formInfo.speciality.label(class="form-label") }}
+                                            {% if formInfo.speciality.errors %} 
+                                                {{ formInfo.speciality(class="form-input is-invalid") }}
+                                                <div class="invalid-feedback">
+                                                    {% for error in formInfo.speciality.errors %}
+                                                    <span>{{ error }}</span> 
+                                                    {% endfor %}
+                                                </div>
+                                            {% else %} 
+                                                {{ formInfo.speciality(class="form-input") }} 
+                                            {% endif %}
+                                        </div>
+                                        <div class="form-group">
+                                            {{ formInfo.location.label(class="form-label") }}
+                                            {% if formInfo.location.errors %} 
+                                                {{ formInfo.location(class="form-input is-invalid") }}
+                                                <div class="invalid-feedback">
+                                                    {% for error in formInfo.location.errors %}
+                                                    <span>{{ error }}</span> 
+                                                    {% endfor %}
+                                                </div>
+                                            {% else %} 
+                                                {{ formInfo.location(class="form-input") }} 
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="w-100 mr-30">
+                                        <div class="form-group">
+                                            {{ formInfo.age.label(class="form-label") }}
+                                            {% if formInfo.age.errors %} 
+                                                {{ formInfo.age(class="form-input is-invalid") }}
+                                                <div class="invalid-feedback">
+                                                    {% for error in formInfo.age.errors %}
+                                                    <span>{{ error }}</span> 
+                                                    {% endfor %}
+                                                </div>
+                                            {% else %} 
+                                                {{ formInfo.age(class="form-input") }} 
+                                            {% endif %}
+                                        </div>
+                                        <div class="form-group">
+                                            {{ formInfo.experience.label(class="form-label") }}
+                                            {% if formInfo.experience.errors %} 
+                                                {{ formInfo.experience(class="form-input is-invalid") }}
+                                                <div class="invalid-feedback">
+                                                    {% for error in formInfo.experience.errors %}
+                                                    <span>{{ error }}</span> 
+                                                    {% endfor %}
+                                                </div>
+                                            {% else %} 
+                                                {{ formInfo.experience(class="form-input") }} 
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="w-100 mr-30">
+                                        <div class="form-group">
+                                            {{ formInfo.hourly_rate.label(class="form-label") }}
+                                            {% if formInfo.hourly_rate.errors %} 
+                                                {{ formInfo.hourly_rate(class="form-input is-invalid") }}
+                                                <div class="invalid-feedback">
+                                                    {% for error in formInfo.hourly_rate.errors %}
+                                                    <span>{{ error }}</span> 
+                                                    {% endfor %}
+                                                </div>
+                                            {% else %} 
+                                                {{ formInfo.hourly_rate(class="form-input") }} 
+                                            {% endif %}
+                                        </div>
+                                        <div class="form-group">
+                                            {{ formInfo.job_done.label(class="form-label") }}
+                                            {% if formInfo.job_done.errors %} 
+                                                {{ formInfo.job_done(class="form-input is-invalid") }}
+                                                <div class="invalid-feedback">
+                                                    {% for error in formInfo.job_done.errors %}
+                                                    <span>{{ error }}</span> 
+                                                    {% endfor %}
+                                                </div>
+                                            {% else %} 
+                                                {{ formInfo.job_done(class="form-input") }} 
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    {{ formInfo.submit(class='form-button') }}
+                                </div>
+                            </div>
+                        </form>
+                        <form action="#", method="POST">
+                            {{ form.hidden_tag() }}
+                            <div class="profile-box-last profile-box">
+                                <h3 class="profile-box-title">Update info</h3>
+                                <div class="form-group-container">
+                                    <div class="w-100 mr-30">
+                                        <div class="form-group">
+                                            {{ aboutform.about_user.label(class="form-label") }}
+                                            {% if aboutform.about_user.errors %} 
+                                                {{ aboutform.about_user(class="form-textarea is-invalid") }}
+                                                <div class="invalid-feedback">
+                                                    {% for error in aboutform.about_user.errors %}
+                                                    <span>{{ error }}</span> 
+                                                    {% endfor %}
+                                                </div>
+                                            {% else %} 
+                                                {{ aboutform.about_user(class="form-textarea") }} 
+                                            {% endif %}
+                                        </div>
+                                        <div class="form-group">
+                                            {{ aboutform.education.label(class="form-label") }}
+                                            {% if aboutform.education.errors %} 
+                                                {{ aboutform.education(class="form-textarea is-invalid") }}
+                                                <div class="invalid-feedback">
+                                                    {% for error in aboutform.education.errors %}
+                                                    <span>{{ error }}</span> 
+                                                    {% endfor %}
+                                                </div>
+                                            {% else %} 
+                                                {{ aboutform.education(class="form-textarea") }} 
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    {{ formInfo.submit(class='form-button') }}
+                                </div>
+                            </div>
+                        </form>
+                        <form action="#">
+                            <div class="profile-box-last profile-box">
+                                <h3 class="profile-box-title">Change password</h3>
+                                <div class="form-group-container">
+                                    <div class="w-100 mr-30">
+                                        <div class="form-group">
+                                            <label for="name" class="form-label">Old password:</label>
+                                            <input type="password" name="name" id="name" class="form-input">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="name" class="form-label">Confirm New Password:</label>
+                                            <input type="password" name="name" id="name" class="form-input">
+                                        </div>
+                                    </div>
+                                    <div class="w-100 mr-30">
+                                        <div class="form-group">
+                                            <label for="name" class="form-label">New Password:</label>
+                                            <input type="password" name="name" id="name" class="form-input">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <button class="form-button" type="button">CHANGE</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="profile-sidebox sidebox hot-projects">
+                        <div class="sidebox-title">
+                            <h4>Hot projects</h4>
+                        </div>
+                        <div class="sidebox-content">
+                            {% for post in sidebox_posts.items %}
+                                <div class="sidebox-job">
+                                    <div class="sidebox-job-title">
+                                        <a href="{{ url_for('post', post_id=post.id) }}">{{ post.title }}</a>
+                                        <span>${{ post.min_pay }} - ${{ post.max_pay }}</span>
+                                    </div>
+                                    <div class="sidebox-job-speciality">
+                                        <i class="fas fa-briefcase"></i>
+                                        <span>{{ post.author.username }}</span>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <a href="{{ url_for('projects') }}" class="view-profile">View more</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

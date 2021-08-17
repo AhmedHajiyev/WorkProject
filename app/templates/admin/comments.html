@@ -1,0 +1,30 @@
+{% extends "admin/base.html" %}
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+{% endblock %}
+{% block content %}
+    <table class="content-table">
+        <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Content</th>
+                <th scope="col">Date Writed</th>
+                <th scope="col">Author</th>
+                <th scope="col">Host Post</th>
+                <th scope="col">Delete</th>
+            </tr>
+        </thead>
+        {% for comment in comments %}
+        <tbody>
+            <tr>
+                <th scope="row">{{ comment.id }}</th>
+                <td>{{ comment.content }}</td>
+                <td>{{comment.date_writed }}</td>
+                <td>{{comment.comment_author.username }}</td>
+                <td>{{comment.host.id }}</td>
+                <td><a href="{{url_for('admin_delete_comment', comment_id=comment.id)}}"><i class="far fa-trash-alt" style="color: red;"></i></a></td>
+            </tr>
+        </tbody>
+        {% endfor %}
+    </table>
+    {% endblock %}

@@ -1,0 +1,109 @@
+{% extends "layout.html" %} {% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/add-project.css') }}"> {% endblock %} {% block content %}
+<main>
+    <div class="projects-content">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <ul class="page-to-page">
+                        <li class="page_home"><a href="#">Home</a></li>
+                        <span><i class="fas fa-long-arrow-alt-right"></i></span>
+                        <li class="page_projects"><a href="#">Post a project</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-9">
+                    <form action="#" class="form" method="POST">
+                        {{ form.hidden_tag() }}
+                        <div class="row">
+                            <div class="col-12 form-area">
+                                <h2 class="form-title">{{ legend }}</h2>
+                                <div class="form-group">
+                                    {{ form.title.label(class="form-label") }}
+                                        {% if form.title.errors %} 
+                                            {{ form.title(class="form-input is-invalid") }}
+                                                <div class="invalid-feedback">
+                                                {% for error in form.title.errors %}
+                                                    <span>{{ error }}</span> 
+                                                {% endfor %}
+                                               </div>
+                                        {% else %} 
+                                                {{ form.title(class="form-input") }} 
+                                        {% endif %}
+                                </div>
+                                <div class="form-group">
+                                    {{ form.content.label(class="form-label") }}
+                                        {% if form.content.errors %} 
+                                            {{ form.content(class="form-textarea is-invalid") }}
+                                            <div class="invalid-feedback">
+                                                {% for error in form.content.errors %}
+                                                    <span>{{ error }}</span> 
+                                                {% endfor %}
+                                                </div>
+                                        {% else %} 
+                                            {{ form.content(class="form-textarea") }} 
+                                        {% endif %}
+                                </div>
+                                <div class="form-group">
+                                    <div class="form-min-max d-flex">
+                                        {% if form.cost_min.errors %} 
+                                            {{ form.cost_min(class="form-input min is-invalid") }}
+                                            <div class="invalid-feedback">
+                                                {% for error in form.cost_min.errors %}
+                                                    <span>{{ error }}</span> 
+                                                {% endfor %}
+                                                </div>
+                                        {% else %} 
+                                            {{ form.cost_min(class="form-input min") }} 
+                                        {% endif %}
+                                        
+                                        {% if form.cost_max.errors %} 
+                                            {{ form.cost_max(class="form-input max is-invalid") }}
+                                            <div class="invalid-feedback">
+                                                {% for error in form.cost_max.errors %}
+                                                    <span>{{ error }}</span> 
+                                                {% endfor %}
+                                                </div>
+                                        {% else %} 
+                                            {{ form.cost_max(class="form-input max") }} 
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <!-- <div class="form-group">
+                                    <label for="skills" class="form-label">Skills:</label>
+                                    <input type="text" name="skills" id="skills" class="form-input">
+                                </div> -->
+                                <div class="form-group">
+                                    {{ form.submit(class='form-button') }}
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-3">
+                    <div class="sidebox-desk sidebox">
+                        <h4 class="sidebox-title">FAQ</h4>
+                        <div class="sidebox-content">
+                            <div class="sidebox-faq">
+                                <h5>Is there a fee to post a project?</h5>
+                                <p>There are pricing plans monthly and yearly for project on Workland. It is a paid service that we offer bith for the employer and the freelancer.</p>
+                            </div>
+                            <div class="sidebox-faq">
+                                <h5>How do I find freelancers for my project?</h5>
+                                <p>Posting a project on Workland will get your project in front of the most qualified freelancers and agencies by bids. You will then get bids for the project with the applicant’s details and reasons why they are the best
+                                    fit for the projects. You can also search for freelancers and invite them to apply.</p>
+                            </div>
+                            <div class="sidebox-faq">
+                                <h5>How do I pay freelancers &amp; agencies?</h5>
+                                <p>You’re free to pay your freelancer and agencies. you can pay automatically for their work through Paypal, Payoneer, or (which allows you to pay via credit card, debit card).</p>
+                            </div>
+                        </div>
+                        <a href="#" class="view-profile">View more</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}
